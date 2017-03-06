@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+	<meta http-equiv="cache-control" content="no-cache">
+<link rel="stylesheet" href="css/amazeui.min.css">
+
+<title>用户注册</title>
+<style>
+	.register-alert{
+		position:absolute;
+		width:40%;
+		text-align: center;
+		margin-left:30%;
+		margin-top : 0%;
+		display:none;
+	}
+</style>
+</head>
+<body>
+	<form action="" class="am-form">
+		<fieldset>
+			<div class="am-g am-g-collapse am-g-fixed">
+				<div class="am-u-sm-12 am-u-lg-12"
+					style="background-color: #ffffff;">
+					<center>
+						<h1>用户注册</h1>
+					</center>
+					<div class="am-alert am-alert-danger register-alert">
+						  	<button type="button" class="am-close">&times;</button>
+					  		<p></p>
+					  </div>
+					<div style="margin-left: 30%; margin-right: 30%; margin-top: 10%">
+						<div class="am-form-group am-form-feedback">
+							<input type="text" class="am-form-field" name="username"
+								placeholder="输入用户名（至少 3 个字符）" />
+						</div>
+						<br>
+						<div class="am-form-group am-form-feedback">
+							<input type="password" class="am-form-field" placeholder="密码"
+								name="password" />
+						</div>
+						<br>
+						<div class="am-form-group am-form-feedback">
+							<input type="password" class="am-form-field" placeholder="确认密码"
+								 name="checkpassword"/>
+						</div>
+						<br>
+						<div class="am-form-group">
+							<select id="doc-select-1" name="sex">
+								<option value="空">性别</option>
+								<option value="男">男</option>
+								<option value="女">女</option>
+							</select>
+							<span class="am-form-caret"></span>
+						</div>
+						<br>
+						<div class="am-form-group am-form-feedback">
+							<input type="email" class="am-form-field" placeholder="邮箱"
+								name="email" />
+						</div>
+						<br>
+						<div class="am-form-group">
+							<div class="am-g am-g-collapse am-g-fixed">
+								<div class="am-u-sm-3 am-u-lg-3">
+									<select name="country_code" class="am-form-field">
+										<option value="1" code="86">中国大陆</option>
+										<option value="2" code="853">澳门特区</option>
+										<option value="3" code="886">台湾</option>
+										<option value="4" code="1">美国</option>
+										<option value="5" code="852">香港</option>
+										<option value="6" code="32">比利时</option>
+										<option value="7" code="61">澳大利亚</option>
+										<option value="8" code="33">法国</option>
+										<option value="9" code="1">加拿大</option>
+										<option value="10" code="81">日本</option>
+										<option value="11" code="65">新加坡</option>
+										<option value="12" code="82">韩国</option>
+										<option value="13" code="60">马来西亚</option>
+									</select>
+								</div>
+								<div class="am-u-sm-9 am-u-lg-9">
+									<input class="am-form-field" type="text" name="phone"
+										placeholder="填写常用手机号" />
+								</div>
+							</div>
+						</div>
+						<br>
+						<div class="am-form-group">
+							<div class="am-g am-g-collapse am-g-fixed">
+								<div class="am-u-sm-9 am-u-lg-9">
+									<input type="text" class="am-form-field" placeholder="验证码" name="checkMessage">
+								</div>
+								<div class="am-u-sm-3 am-u-lg-3">
+									<button type="button" class="am-btn am-btn-primary"
+										id="getCheck" onclick="sendMessage()">点击获取</button>
+								</div>
+							</div>
+						</div>
+						<div>
+							<center>
+								<label><input name="agree" type="checkbox" value=""
+									id="regText" />我已同意<a target="_blank" href="/register/licence">《用户使用协议》</a></label>
+							</center>
+						</div>
+						<br>
+						<div class="am-form-group">
+							<div class="am-g am-g-collapse am-g-fixed">
+								<div class="am-u-sm-12 am-u-lg-12">
+									<button type="button" class="am-btn am-btn-primary"
+										style="width: 100%" disabled id="regBtn" onclick="regist()">注册</button>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</fieldset>
+	</form>
+	<script src="js/jquery.min.js"></script>
+	<script type="text/javascript">
+		var InterValObj; //timer变量，控制时间  
+		var count = 60; //间隔函数，1秒执行  
+		var curCount;//当前剩余秒数  
+		var code = ""; //验证码  
+		var codeLength = 6;//验证码长度  
+		var regBtn = $("#regBtn");
+		var rooturl="/campus2/";//根据自己的项目名字修改
+		var flag = [false,false,false,false];//表单是否全部验证
+		$("#regText").change(function() {
+			var that = $(this);
+			that.prop("checked", that.prop("checked"));
+			if (that.prop("checked")) {
+				regBtn.prop("disabled", false)
+			} else {
+				regBtn.prop("disabled", true)
+			}
+		});
+		$("input[name=username]").focusout(
+				function() {
+					var now = $(this);
+					if(now.val()=="")
+					{
+						return false;
+					}
+					$.ajax({
+						url : rooturl+"isExist?username=" + $(this).val(),
+						type : "GET",
+						dataType : "JSON",
+						success : function(data) {
+							if (data.result == "success") {
+								now.parent().removeClass("am-form-error");
+								now.parent().addClass("am-form-success")
+										.addClass("am-form-icon");
+								now.parent().append(
+										"<span class='am-icon-check'></span>");
+								flag[0] = true;
+							} else {
+								now.parent().removeClass("am-form-success");
+								now.parent().addClass("am-form-error");
+								now.parent().find("span").remove();
+								flag[0] = false;
+							}
+						}
+					});
+				});
+		function SetRemainTime() {  
+		    if (curCount == 0) {                  
+		        window.clearInterval(InterValObj);// 停止计时器  
+		        $("#getCheck").removeAttr("disabled");// 启用按钮  
+		        $("#getCheck").html("重新获取验证码");  
+		        code = ""; // 清除验证码。如果不清除，过时间后，输入收到的验证码依然有效  
+		    }else {  
+		        curCount--;  
+		        $("#getCheck").html(curCount + "秒内输入验证码");  
+		    }  
+		}  
+		function sendMessage(){
+			var phone = $("input[name=phone]").val();
+			 if(!(/^1[34578]\d{9}$/).test(phone)){ 
+	        	alert("手机号码有误，请重填");  
+	        	return false; 
+			 }
+			curCount = count;
+			var phone = $("input[name=phone]").val();
+			$("#getCheck").attr("disabled", "true");  
+            $("#getCheck").html(+ curCount + "秒内输入验证码");  
+            InterValObj = window.setInterval(SetRemainTime, 1000); // 启动计时器，1秒执行一次
+
+			 for ( var i = 0; i < codeLength; i++) {  
+	                code += parseInt(Math.random() * 9).toString();  
+	            }  
+			 $.ajax({
+				url:rooturl+"getCheck",
+				type:"POST",
+				dataType:"JSON",
+				data :{"mobile":phone,"check":code},
+				success:function(data){
+					//alert("成功发送");
+				},
+				error : function(data){
+					alert(data);
+				}
+			 });
+
+		};
+		$("input[name=checkMessage]").blur(function(){
+			var checkMessage = $(this).val();
+			$.ajax({
+				url:rooturl+"check",
+				type:"POST",
+				dataType:"JSON",
+				data:{"check":checkMessage},
+				success:function(data){
+					if(data.success==1){
+						flag[2] = true;
+					}else{
+						flag[2] = false;
+					}
+				}
+						
+			});
+		});
+		$("input[name=password]").blur(function(){
+			var pass = $(this).val();
+			var check = $("input[name=checkpassword]").val();
+			if(pass!=""){
+				$(this).parent().addClass("am-form-success").addClass("am-form-icon");
+				$(this).parent().append(
+				"<span class='am-icon-check'></span>");
+				if(pass==check){
+					$("input[name=checkpassword]").parent().removeClass("am-form-error").addClass("am-form-success").addClass("am-form-icon");
+					$("input[name=checkpassword]").parent().append(
+					"<span class='am-icon-check'></span>");
+					flag[1] = true;
+				}
+			}
+		});
+		$("input[name=checkpassword]").blur(function(){
+			var password = $("input[name=password]").val();
+			if($(this).val()=="")
+				return false;
+			var checkpassword = $(this).val();
+			if(password!=null){
+				if(password==checkpassword){
+					$(this).parent().addClass("am-form-success").addClass("am-form-icon");
+					$(this).parent().append(
+					"<span class='am-icon-check'></span>");
+					flag[1] = true;
+				}else{
+					$(this).parent().removeClass("am-form-success");
+					$(this).parent().addClass("am-form-error");
+					$(this).parent().find("span").remove();
+					flag[1] = false;
+				}
+			}
+		});
+		$("input[name=email]").blur(function(){
+			var email = $(this).val();
+			var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/ ;
+			if(reg.test(email)){
+				$(this).parent().addClass("am-form-success").addClass("am-form-icon");
+				$(this).parent().append(
+				"<span class='am-icon-check'></span>");
+				flag[3] = true;
+			}else{
+				$(this).parent().removeClass("am-form-success");
+				$(this).parent().addClass("am-form-error");
+				$(this).parent().find("span").remove();
+				flag[3] = false;
+			}
+		});
+		 $(".register-alert button").click(function(){
+	    	 $(this).parent().slideUp(); 
+	      });
+		$("input[name=username],input[name=password],input[name=checkpassword],input[name=checkMessage],input[name=email]").keyup(function(){
+			$(".register-alert").slideUp();
+		});
+		function regist(){
+			var userName = $("input[name=username]").val();
+			var userPass = $("input[name=password]").val();
+			var phone = $("input[name=phone]").val();
+			var email = $("input[name=email]").val();
+			var error = $(".register-alert");
+			var sex = $("select[name=sex]").val();
+				if(flag[0]==false){
+					error.find("p").html("请输入正确的帐号");
+					error.slideDown();
+					return false;
+				}else if(flag[1]==false){
+					if(userPass=="") error.find("p").html("请输入密码");
+					else error.find("p").html("请确认两次输入相同的密码");
+					error.slideDown();
+					return false;
+				}else if(flag[2]==false){
+					error.find("p").html("请确认验证码");
+					error.slideDown();
+					return false;
+				}else if(flag[3]==false){
+					error.find("p").html("请出入正确的邮箱");
+					error.slideDown();
+					return false;
+				}else if($("select[name=sex]").val()=="男")
+				{
+					error.find("p").html("暂不支持男性用户注册");
+					error.slideDown();
+					return false;
+				}else if($("select[name=sex]").val()=="空")
+				{
+					error.find("p").html("请选择性别");
+					error.slideDown();
+					return false;
+				}
+				$.ajax({
+					url:rooturl+"addUser",
+					type:"POST",
+					dataType:"JSON",
+					data:{"userName":userName,"userPwd":userPass,"phone":phone,"email":email,"userSex":sex},
+					success:function(data){
+						
+						if(data.result=="success");
+						{
+							swal("OK","注册成功","success")
+							$(".confirm").click(function(){
+								window.location.href="login.html";
+								$(this).off();
+							})
+							
+						}
+					}
+				});
+		}
+		
+	</script>
+</body>
+</html>

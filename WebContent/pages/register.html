@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport"content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link rel="stylesheet" href="css/amazeui.min.css">
+    
+    <title>用户注册</title>
+   
+</head>
+<body>
+<form action="" class="am-form">
+    <fieldset>
+    <div class="am-g am-g-collapse am-g-fixed">
+        <div class="am-u-sm-12 am-u-lg-12" style="background-color: #ffffff;">
+                <center>
+                    <h1>用户注册</h1>
+                </center>
+            <div style="margin-left: 30%;margin-right: 30%;margin-top:10%">
+                <div class="am-form-group am-form-feedback">
+                    <input type="text" class="am-form-field" name="username" placeholder="输入用户名（至少 3 个字符）" />
+                </div>
+                <br>
+                <div class="am-form-group">
+                    <input type="password" class="am-form-field" placeholder="密码"required/>
+                </div>
+                <br>
+                <div class="am-form-group">
+                    <input type="password" class="am-form-field" placeholder="确认密码"required/>
+                </div>
+                <br>
+                <div class="am-form-group">
+                    <input type="email" class="am-form-field" placeholder="邮箱"required/>
+                </div>
+                <br>
+                <div class="am-form-group">
+                    <div class="am-g am-g-collapse am-g-fixed">
+                        <div class="am-u-sm-3 am-u-lg-3">
+                            <select name="country_code" class="am-form-field">
+                                <option value="1" code="86">中国大陆</option>
+                                <option value="2" code="853">澳门特区</option>
+                                <option value="3" code="886">台湾</option>
+                                <option value="4" code="1">美国</option>
+                                <option value="5" code="852">香港</option>
+                                <option value="6" code="32">比利时</option>
+                                <option value="7" code="61">澳大利亚</option>
+                                <option value="8" code="33">法国</option>
+                                <option value="9" code="1">加拿大</option>
+                                <option value="10" code="81">日本</option>
+                                <option value="11" code="65">新加坡</option>
+                                <option value="12" code="82">韩国</option>
+                                <option value="13" code="60">马来西亚</option>
+                            </select>
+                        </div>
+                        <div class="am-u-sm-9 am-u-lg-9">
+                            <input class="am-form-field" type="text" name="tel" placeholder="填写常用手机号"/>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="am-form-group">
+                    <div class="am-g am-g-collapse am-g-fixed">
+                        <div class="am-u-sm-9 am-u-lg-9">
+                            <input type="text" class="am-form-field" placeholder="验证码">
+                        </div>
+                        <div class="am-u-sm-3 am-u-lg-3">
+                            <button type="button"class="am-btn am-btn-primary">点击获取</button>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <center><label><input name="agree" type="checkbox" value="" id="regText"/>我已同意<a target="_blank" href="/register/licence">《用户使用协议》</a></label></center>
+                </div>
+                <br>
+                <div class="am-form-group">
+                    <div class="am-g am-g-collapse am-g-fixed">
+                        <div class="am-u-sm-12 am-u-lg-12">
+                            <button type="submit"class="am-btn am-btn-primary"style="width: 100%"disabled id="regBtn">注册</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        </fieldset>
+    </form>
+    <script src="js/jquery.min.js"></script>
+    <script type="text/javascript">
+            var regBtn = $("#regBtn");
+            $("#regText").change(function(){
+                var that = $(this);
+                that.prop("checked",that.prop("checked"));
+                if(that.prop("checked")){
+                    regBtn.prop("disabled",false)
+                }else{
+                    regBtn.prop("disabled",true)
+                }
+            });
+            $("input[name=username]").focusout(function(){
+            	
+            	var now = $(this);
+            	$.ajax({
+            		url:"/campus2/isExist?username="+$(this).val(),
+            		type:"GET",
+            		dataType:"JSON",
+            		success:function(data){
+            			if(data.result=="success"){
+            				now.parent().removeClass("am-form-error");
+            				now.parent().addClass("am-form-success").addClass("am-form-icon");
+            				now.parent().append("<span class='am-icon-check'></span>")
+            			}else{
+            				now.parent().removeClass("am-form-success");
+            				now.parent().addClass("am-form-error");
+            				now.parent().find("span").remove();
+            			}
+            		}
+            	});
+            });
+        
+    </script>
+</body>
+</html>

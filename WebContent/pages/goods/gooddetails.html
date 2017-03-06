@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<body>
+
+	<div class="jumbotron">
+		<div style="font-size: 20px; positon: absolute;">
+			<a href="javascript:void(0)" id="turnback"><i
+				class="fa fa-chevron-left"></i>返回</a>
+		</div>
+		<div class="container">
+
+			<div class="col-md-12" style="margin: 0px 0 20px 0">
+				<h2 id="goodName" style="text-align: center; font-size: 50px"></h2>
+			</div>
+
+			<div class="col-md-12" style="margin: 20px 0 20px 0">
+				<div id="goodImg" class="col-md-6">
+					<img id="goodImg1" src="img/yi.png" />
+				</div>
+				<div id="goodIfo" class="col-md-6">
+					<table
+						style="border-collapse: separate; border-spacing: 20px; font-size: 20px">
+						<tbody>
+							<tr>
+								<td>发布人</td>
+								<td id="userName"></td>
+							</tr>
+							<tr>
+								<td>发布时间</td>
+								<td id="createDate"></td>
+							</tr>
+							<tr>
+								<td><span style="font-size: 40px">价格</span></td>
+								<td><span id="price" style="font-size: 40px"></span></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div class="col-md-12" style="margin: 20px 0 20px 0">
+
+				<label style="font-size: 30px">商品简介</label>
+				<form role="form">
+					<div class="form-group">
+						<textarea id="goodIntroduction" class="form-control"
+							readonly="readonly" rows="5"></textarea>
+					</div>
+				</form>
+
+			</div>
+
+			<div class="col-md-12" style="margin: 20px 0 20px 0">
+				<div class="col-md-1"></div>
+				<div class="col-md-4">
+					<button type="button" id="buy"
+						class="btn btn-info btn-lg btn-block">购买</button>
+				</div>
+				<div class="col-md-2"></div>
+				<div class="col-md-4">
+					<button type="button" id="change"
+						class="btn btn-info btn-lg btn-block">交换</button>
+				</div>
+				<div class="col-md-1"></div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="changeModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<h4 class="modal-title">选择交换的物品</h4>
+				</div>
+				<div class="modal-body" style="padding-left: 60px">
+					<span>请选择:</span> <select id="sel_menu2" class="form-control"
+						style="width: 400px">
+						<optgroup label="商品名称">
+						</optgroup>
+					</select>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-primary changeconfirm">确定</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+	<script src="goods/gooddetails.js"></script>
+</body>
+</html>

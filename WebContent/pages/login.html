@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="cache-control" content="no-cache">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>Thinks for use</title>
+
+    <link href="/campus2/pages/css/amazeui.min.css" rel="stylesheet">
+
+    <style media="screen">
+//    input:-webkit-autofill {
+//	-webkit-box-shadow: 0 0 0px 1000px white inset;
+//	border: 1px solid #CCC!important;
+//	}
+    .header {
+      text-align: center;
+      padding-top : 30px;
+    }
+    .header h1 {
+      font-size: 200%;
+      color: #333;
+      margin-top: 30px;
+    }
+    .header p {
+      font-size: 14px;
+    }
+    div.login-alert{
+    	display:none;
+    	background-color: #b94a48;	
+    	position: absolute;
+    	width:30%;
+    	height:50px;
+    	text-align: center;
+    	margin:0 35%;
+    }
+    </style>
+  </head>
+  <body>
+	  <div class="am-alert am-alert-danger login-alert">
+	  	<button type="button" class="am-close">&times;</button>
+  		<p></p>
+	  </div>
+    <div class="header">
+      <div class="am-g">
+        <h1>CampusTransaction</h1>
+        <p>认真负责<br/>交易发布，交易进行，交易生效</p>
+      </div>
+      <hr />
+    </div>
+    <div class="am-g">
+      <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
+        <form method="post" class="am-form" autocomplete="off">
+
+          <label for="username">用户名:</label>
+          <input type="text" name="username" id="username" value=""  >
+          <br>
+          <label for="password">密码:</label>
+          <input type="password" name="password" id="passowrd" autocomplete="new-password">
+          <br>
+          <label for="remember-me">
+            <input id="remember-me" type="checkbox">
+            Remenber Me
+          </label>
+          <div class="am-cf" style="display:inline-block;padding-left:66%">
+            <input type="button" value="登陆" class="am-btn am-btn-default am-btn-sm login" style="outline:none">
+            <input type="button" value="注册" class="am-btn am-btn-default am-btn-sm register" style="outline:none">
+          </div>
+        </form>
+        <hr>
+        <p>自测使用,请勿嘲笑</p>
+      </div>
+    </div>
+    <script src="/campus2/pages/js/jquery.min.js"></script>
+    <script src="/campus2/pages/js/amazeui.min.js"></script>
+    <script type="text/javascript">
+   	  var rooturl = "/campus2/";
+      $(".login-alert button").click(function(){
+    	 $(this).parent().slideUp(); 
+      });
+      $("input").keyup(function(){
+    	  $(".login-alert").slideUp();
+      });
+      $(".login").click(function(){
+        var url = rooturl+"dologin";
+        var params = $("input").serialize();
+        $.ajax({
+          url: url,
+          type : 'post',
+          dataType : "JSON",
+          data:params,
+          success : function(data){
+        	if(data.result!="OK"){
+     	      $(".login-alert p").html(data.result);
+	          $(".login-alert").slideDown();
+		    }else{
+		    	if(data.user=="admin")
+		    	{
+		    		sessionStorage.user = "admin";
+		    		sessionStorage.userId = 1;
+		    		window.location.href = rooturl+"pages/admin/main.html";
+		    	}else{
+		    		sessionStorage.user = data.user;
+		    		sessionStorage.userId = data.userId;
+		    		console.log(data.userId);
+		    		window.location.href = rooturl+"pages/main.html";
+		    	}
+		    }
+          },
+          error : function(msg){
+            alert(msg);
+          }
+        });
+      });
+      $(".register").click(function(){
+    	  window.location.href="register2.html";
+      })
+    </script>
+  </body>
+</html>

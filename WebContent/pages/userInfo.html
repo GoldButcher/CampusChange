@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>用户信息</title>
+<link href="css/bootstrap3.min.css" rel="stylesheet" media="screen">
+<link href="css/bootstrap-responsive.min.css" rel="stylesheet"
+	media="screen">
+<link href="css/styles.css" rel="stylesheet" media="screen">
+<link href="css/jquery.easy-pie-chart.css" rel="stylesheet"
+	media="screen">
+<link href="css/DT_bootstrap.css" rel="stylesheet" media="screen">
+<link href="css/default.css" rel="stylesheet" media="screen">
+<style>
+.usertable {
+	margin: auto;
+	text-align: center;
+	margin-top: 30px;
+	font-family: "微软雅黑";
+	width: 85%;
+	font-size: 18px;
+	font-weight: 580;
+	color: #36648B;
+	border-color: #337ab7;
+}
+
+#tableInfo td {
+	height: 57px;
+}
+
+#tableInfo input[type="text"], input[type="email"], input[type="radio"]
+	{
+	background-color: transparent;
+}
+
+.utitle {
+	font-size: 20px;
+	font-weight: bold;
+	margin-left: -50px;
+}
+
+input[type="text"], input[type="email"] {
+	width: 100%;
+	height: 120%;
+	text-align: center;
+	color: black;
+	border: 2px solid #DBDBDB;
+	border-radius: 5px;
+}
+
+#butDiv {
+	
+}
+
+#upheadDiv {
+	position: absolute;
+	top: 65%;
+	left: 43%;
+	display: none;
+}
+
+input[type='button'] {
+	width: 80px;
+	height: 40px;
+	margin-left: 20px;
+	border: 1px solid;
+	color: white;
+	font-family: "微软雅黑";
+	background-color: #286090;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+#pwdForm i {
+	padding-right: 15px;
+}
+</style>
+
+</head>
+<body>
+	<div id="tableInfo">
+		<form id="userForm" name="userForm">
+			<table class="table table-bordered table-striped "
+				style="width: 820px; margin: 7px auto;">
+				<tr>
+					<td><span>修改时间</span></td>
+					<td><input type="text" style="border: none;" readonly
+						id="loginName" name="loginName"></td>
+					<td width="30%" rowspan="6" colspan="2" style="position: relative;"><div>
+							<img src="img/user_men.png" style="width: 200px; height: 112.5"
+								id="showPhoto" />
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td><span>登录帐号</span></td>
+					<td><input type="text" style="border: none;" readonly
+						type="text" id="teacherName" name="teacherName"></td>
+				</tr>
+				<tr>
+					<td><span>创建日期</span></td>
+					<td><input style="border: none;" readonly type="text"
+						id="teacherCard" name="teacherCard"></td>
+				</tr>
+				<tr>
+					<td>用户角色</td>
+					<td><input type="text" style="border: none;" readonly
+						id="actorName" name="actorName" /></td>
+
+
+				</tr>
+				<tr>
+					<td><span>用户性别</span></td>
+					<td><div class="radio">
+							<label> <input type="radio" id="teacherSex"
+								name="teacherSex" value="男" /> 男
+							</label> <label style="margin-left: 50px;"> <input type="radio"
+								id="teacherSex" name="teacherSex" value="女" /> 女
+							</label>
+						</div></td>
+				</tr>
+				<tr>
+					<td><span>手机号码</span></td>
+					<td><input type="text" id="teacherPhone" name="teacherPhone"></td>
+
+				</tr>
+				<tr>
+					<td><span>邮箱地址</span></td>
+					<td><input readonly type="text" value="1975-12-30"
+						id="teacherBirthday" name="teacherBirthday" style="border: none" /></td>
+					<td style="background-color: white;"><div id="butDiv">
+							<input type="button" value="取  消" id="cancel"
+								style="display: none; background-color: #d9534f;"
+								onclick="$.cancel()" />
+						</div></td>
+				</tr>
+				<tr>
+					<td><span>用户姓名</span></td>
+					<td><input type="email" id="teacherEmail" name="teacherEmail"></td>
+					<td style=""><div>
+							<input type="button" value="修改信息" id="modify"
+								onclick="$.modify()">
+						</div></td>
+
+				</tr>
+				<tr>
+					<td><span>个人介绍</span></td>
+					<td><textArea id="teacherIntroduce" name="teacherIntroduce"
+							class="form-control"
+							style="border: none; background-color: transparent;" readonly></textArea></td>
+					<td style="background-color: white;"><div>
+							<input type="button" value="修改密码"
+								onclick="$('#passwordModal').modal('show')"
+								style="background-color: #2B9240;">
+						</div></td>
+
+				</tr>
+			</table>
+			<input type="hidden" name="teacherId" id="teacherId" /> <input
+				type="hidden" name="userDevice" value="web" /> <input type="hidden"
+				name="sessionId" id="sessionId" /> <input type="hidden"
+				name="teacherPhoto" id="teacherPhoto" />
+		</form>
+	</div>
+
+
+
+	<!-- 图片上传modal -->
+	<div class="modal fade" id="upPhotoModal" tabindex="-1" role="dialog"
+		aria-labelledby="upPhotoModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<label class="modal-title" id="upPhotoModalLabel"></label>
+					<button type="button" title='关闭' class="btn btn-danger btn-xs"
+						onclick="$.closeUpPhModal()"
+						style="float: right; margin-top: -5px;">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+					</button>
+				</div>
+				<div class="modal-body row">
+
+					<div id="container" class="col-sm-12">
+						<a id="selectfiles" href="javascript:void(0);"
+							class='btn btn-primary'><span
+							class='glyphicon glyphicon-picture'></span> 选择图片</a> <a
+							id="postfiles" href="javascript:void(0);" class='btn btn-success'><span
+							class='glyphicon glyphicon-send'></span> 开始上传</a>
+					</div>
+					<div id="ossfile" class="col-sm-12" style="margin-top: 20px;"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary"
+						onclick="$.closeUpPhModal()">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+						取消
+					</button>
+					<button type="button" class="btn btn-success"
+						onclick="$.doneUpPhoto()">
+						<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 完成
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 密码修改modal -->
+	<div class="modal fade bs-example-modal-sm" id="passwordModal"
+		tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog modal-sm" id="planCourse-dialog">
+			<div class="modal-content">
+				<form id="pwdForm" name='pwdForm'>
+					<div class="modal-header">
+						<label class="modal-title" id="passwordModalLabel">修改密码</label>
+						<button type="button" title="关闭" class="btn btn-danger btn-xs"
+							onclick="$.closeDefaultModel($(this).parents())"
+							style="float: right; margin-top: -5px;">
+							<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="row" id="input-content">
+							
+							<div class="form-group col-sm-12" id="passwordnew" style="margin-left:5px;">
+								<label>新密码：</label> <input type="password" class="form-control"
+									name="newpassword" id="newpassword" placeholder="输入新密码">
+							</div>
+							<div class="form-group col-sm-12" id="passwordrepeat" style="margin-left:5px;">
+								<label>再次输入：</label> <input type="password" class="form-control"
+									name="repeatpassword" id="repeatpassword" placeholder="再次输入新密码"
+									onchange="$.checkPwd()">
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer" style="margin-bottom: 30px;">
+						<button type="button" class="btn btn-primary"
+							onclick="$.closeDefaultModel($(this).parents())">
+							<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+							取消
+						</button>
+						<button id="save-button" type="button" class="btn btn-success"
+							onclick="$.ChangePwd()">
+							<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+							保存
+						</button>
+					</div>
+					<input type="hidden" name='sessionId' /> <input type="hidden"
+						name="userDevice" value='web' /> <input type="hidden"
+						name='teacherId' />
+				</form>
+			</div>
+		</div>
+	</div>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="js/crypto.js"></script>
+	<script type="text/javascript" src="js/hmac.js"></script>
+	<script type="text/javascript" src="js/sha1.js"></script>
+	<script type="js/base64.js"></script>
+	<script type="text/javascript" src="js/plupload.full.min.js"></script>
+	<script type="text/javascript" src="js/upload.js"></script>
+	<!--  web 直传  | -->
+	<script type="text/javascript" src="userInfo.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/DT_bootstrap.js"></script>
+	<script src="js/jquery.easy-pie-chart.js"></script>
+	<script src="js/moment.min.js"></script>
+	<script src="js/common.js"></script>
+	<script src="js/pace.min.js"></script>
+</body>
+</html>
